@@ -28,12 +28,9 @@ func (am *AuthMenu) Duplicate(name string) bool {
 	err := res.Scan(&idExist)
 	if err != nil {
 		log.Println("Result scan error", err.Error())
-		return true
+		return false
 	}
-	if idExist > 0 {
-		return true
-	}
-	return false
+	return true
 }
 
 func (am *AuthMenu) Register(newUser User) (bool, error) {
@@ -65,7 +62,7 @@ func (am *AuthMenu) Register(newUser User) (bool, error) {
 
 	if affRows <= 0 {
 		log.Println("no record affected")
-		return true, errors.New("no record")
+		return false, errors.New("no record")
 	}
 
 	return true, nil
