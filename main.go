@@ -50,6 +50,8 @@ func main() {
 				loginMenu := 0
 				for isLogin {
 					fmt.Println("1. Tambah Aktivitas")
+					fmt.Println("2. Lihat Profil")
+					fmt.Println("3. Ganti Password")
 					fmt.Println("9. Logout")
 					fmt.Print("Masukkan menu : ")
 					fmt.Scanln(&loginMenu)
@@ -81,6 +83,21 @@ func main() {
 						}
 						inputActivity.ID = actRes
 						fmt.Println(inputActivity)
+					} else if loginMenu == 2 {
+						fmt.Println("Halo")
+						fmt.Println("Nama :", res.Nama)
+					} else if loginMenu == 3 {
+						var inputPass string
+						fmt.Print("Masukkan password baru")
+						fmt.Scanln(&inputPass)
+						isChanged, err := authMenu.GantiPassword(inputPass, res.ID)
+						if err != nil {
+							fmt.Println(err.Error())
+						}
+						if isChanged {
+							fmt.Println("Berhasil ganti password")
+							isLogin = false
+						}
 					} else if loginMenu == 9 {
 						isLogin = false
 					}

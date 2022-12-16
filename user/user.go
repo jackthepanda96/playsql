@@ -93,3 +93,31 @@ func (am *AuthMenu) Login(nama string, password string) (User, error) {
 
 	return res, nil
 }
+
+func (am *AuthMenu) GantiPassword(newPassword string, id int) (bool, error) {
+	gantiPassQry, err := am.DB.Prepare("UPDATE users SET password = ? WHERE id = ?")
+	if err != nil {
+		log.Println("prepare update password ", err.Error())
+		return false, errors.New("prepare statement update password error")
+	}
+
+	res, err := gantiPassQry.Exec(newPassword, id)
+	if err != nil {
+		log.Println("update password ", err.Error())
+		return false, errors.New("update password error")
+	}
+	// Cek berapa baris yang terpengaruh query diatas
+	affRows, err := res.RowsAffected()
+
+	if err != nil {
+		log.Println("after update password ", err.Error())
+		return false, errors.New("error setelah update password")
+	}
+
+	if affRows <= 0 {
+		log.Println("no record affected")
+		return false, errors.New("no record")
+	}
+
+	return true, nil
+}
