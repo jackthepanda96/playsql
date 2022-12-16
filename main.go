@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"todo/activity"
 	"todo/config"
 	"todo/user"
 )
@@ -11,6 +12,7 @@ func main() {
 	var cfg = config.ReadConfig()
 	var conn = config.ConnectSQL(*cfg)
 	var authMenu = user.AuthMenu{DB: conn}
+	var activMenu = activity.NewActivityMenu(conn)
 
 	for inputMenu != 0 {
 		fmt.Println("1. Register")
@@ -52,8 +54,24 @@ func main() {
 					fmt.Print("Masukkan menu : ")
 					fmt.Scanln(&loginMenu)
 					if loginMenu == 1 {
+						inputActivity := activity.Activity{}
+						var inputString string
 						fmt.Print("Masukkan Judul Kegiatan : ")
+						fmt.Scanln(&inputString)
+						inputActivity.SetTitle(inputString)
 						fmt.Print("Masukkan Lokasi: ")
+						fmt.Scanln(&inputString)
+						inputActivity.SetLocation(inputString)
+						fmt.Print("Masukkan Due Date: ")
+						fmt.Scanln(&inputString)
+						inputActivity.SetCreateDate(inputString)
+						inputActivity.SetOwner(res.ID)
+						actRes, err := activMenu.Insert(inputActivity)
+						if err != nil {
+							fmt.Println(err.Error())
+						}
+						inputActivity.SetID(actRes)
+						fmt.Println(inputActivity)
 					} else if loginMenu == 9 {
 						isLogin = false
 					}
