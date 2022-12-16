@@ -14,6 +14,7 @@ type Activity struct {
 	owner       int
 }
 
+// SET digunakan untuk mengisikan value kedalam properti
 func (a *Activity) SetID(newID int) {
 	a.id = newID
 }
@@ -30,6 +31,7 @@ func (a *Activity) SetOwner(owner int) {
 	a.owner = owner
 }
 
+// GET Membaca value properti
 func (a *Activity) GetID() int {
 	return a.id
 }
@@ -50,7 +52,12 @@ type ActivtyMenu struct {
 	db *sql.DB
 }
 
-func NewActivityMenu(conn *sql.DB) *ActivtyMenu {
+type ActivityInterface interface {
+	Insert(newActivity Activity) (int, error)
+}
+
+// Dependency Injection
+func NewActivityMenu(conn *sql.DB) ActivityInterface {
 	return &ActivtyMenu{
 		db: conn,
 	}
@@ -85,5 +92,4 @@ func (am *ActivtyMenu) Insert(newActivity Activity) (int, error) {
 	id, _ := res.LastInsertId()
 
 	return int(id), nil
-
 }

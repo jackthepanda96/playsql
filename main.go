@@ -12,8 +12,8 @@ func main() {
 	var cfg = config.ReadConfig()
 	var conn = config.ConnectSQL(*cfg)
 	var authMenu = user.AuthMenu{DB: conn}
-	var activMenu = activity.NewActivityMenu(conn)
-
+	// var activMenu = activity.NewActivityMenu(conn)
+	var activMenu = activity.ActivtyMenuN{DB: conn}
 	for inputMenu != 0 {
 		fmt.Println("1. Register")
 		fmt.Println("2. Login")
@@ -54,23 +54,32 @@ func main() {
 					fmt.Print("Masukkan menu : ")
 					fmt.Scanln(&loginMenu)
 					if loginMenu == 1 {
-						inputActivity := activity.Activity{}
-						var inputString string
+						// inputActivity := activity.Activity{}
+						// var inputString string
+						// fmt.Print("Masukkan Judul Kegiatan : ")
+						// fmt.Scanln(&inputString)
+						// inputActivity.SetTitle(inputString)
+						// fmt.Print("Masukkan Lokasi: ")
+						// fmt.Scanln(&inputString)
+						// inputActivity.SetLocation(inputString)
+						// fmt.Print("Masukkan Due Date: ")
+						// fmt.Scanln(&inputString)
+						// inputActivity.SetCreateDate(inputString)
+						// inputActivity.SetOwner(res.ID)
+						// actRes, err := activMenu.Insert(inputActivity)
+						// inputActivity.SetID(actRes)
+						inputActivity := activity.ActivityN{}
 						fmt.Print("Masukkan Judul Kegiatan : ")
-						fmt.Scanln(&inputString)
-						inputActivity.SetTitle(inputString)
-						fmt.Print("Masukkan Lokasi: ")
-						fmt.Scanln(&inputString)
-						inputActivity.SetLocation(inputString)
-						fmt.Print("Masukkan Due Date: ")
-						fmt.Scanln(&inputString)
-						inputActivity.SetCreateDate(inputString)
-						inputActivity.SetOwner(res.ID)
+						fmt.Scanln(&inputActivity.Title)
+						fmt.Print("Masukkan Lokasi Kegiatan : ")
+						fmt.Scanln(&inputActivity.Location)
+						fmt.Print("Masukkan Due Date : ")
+						fmt.Scanln(&inputActivity.CreateDate)
 						actRes, err := activMenu.Insert(inputActivity)
 						if err != nil {
 							fmt.Println(err.Error())
 						}
-						inputActivity.SetID(actRes)
+						inputActivity.ID = actRes
 						fmt.Println(inputActivity)
 					} else if loginMenu == 9 {
 						isLogin = false
