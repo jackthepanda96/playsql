@@ -32,6 +32,33 @@ func main() {
 			} else {
 				fmt.Println("Gagal mendaftarn data")
 			}
+		} else if inputMenu == 2 {
+			var inputNama, inputPassword string
+			fmt.Print("Masukkan nama : ")
+			fmt.Scanln(&inputNama)
+			fmt.Print("Masukkan password : ")
+			fmt.Scanln(&inputPassword)
+			res, err := authMenu.Login(inputNama, inputPassword)
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+
+			if res.ID > 0 {
+				isLogin := true
+				loginMenu := 0
+				for isLogin {
+					fmt.Println("1. Tambah Aktivitas")
+					fmt.Println("9. Logout")
+					fmt.Print("Masukkan menu : ")
+					fmt.Scanln(&loginMenu)
+					if loginMenu == 1 {
+						fmt.Print("Masukkan Judul Kegiatan : ")
+						fmt.Print("Masukkan Lokasi: ")
+					} else if loginMenu == 9 {
+						isLogin = false
+					}
+				}
+			}
 		}
 	}
 }

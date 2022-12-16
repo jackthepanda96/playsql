@@ -68,6 +68,28 @@ func (am *AuthMenu) Register(newUser User) (bool, error) {
 	return true, nil
 }
 
-func (am *AuthMenu) Login() {
+func (am *AuthMenu) Login(nama string, password string) (User, error) {
+	loginQry, err := am.DB.Prepare("SELECT id FROM users WHERE nama = ? AND password = ?")
+	if err != nil {
+		log.Println("prepare insert user ", err.Error())
+		return User{}, errors.New("prepare statement insert user error")
+	}
 
+	row := loginQry.QueryRow(nama, password)
+
+	if row.Err() != nil {
+		log.Println("login query ", row.Err().Error())
+		return User{}, errors.New("tidak bisa login, data tidak ditemukan")
+	}
+	res := User{}
+	err = row.Scan(&res.ID)
+
+	if err != nil {
+		log.Println("after login query ", err.Error())
+		return User{}, errors.New("tidak bisa login, kesalahan setelah error")
+	}
+
+	res.Nama = nama
+
+	return res, nil
 }
